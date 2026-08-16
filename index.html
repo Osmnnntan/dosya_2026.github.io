@@ -148,6 +148,7 @@ hr.rule{border:none;border-top:1px dashed var(--line2);margin:14px 0}
 
 /* scene */
 #sceneWrap{position:relative;overflow:hidden;background:#0b0a09;border:1px solid var(--line);height:min(62vh,540px);cursor:grab;touch-action:none}
+#sceneLayer{filter:brightness(1.22) contrast(1.05) saturate(1.08)}
 #sceneWrap.grabbing{cursor:grabbing}
 #sceneLayer{position:absolute;inset:0;transform-origin:0 0}
 .hot{
@@ -289,688 +290,6 @@ textarea.f{min-height:80px;resize:vertical}
 @media (max-width:900px){.split{grid-template-columns:1fr}}
 .recon-item{border:1px solid var(--line2);background:#161821;padding:8px 10px;margin-bottom:6px;font-size:11.5px;cursor:grab}
 .recon-item.dragging{opacity:.4}
-  /* ===== PREMIUM FORENSIC UI OVERLAY ===== */
-  :root {
-    --bg-0:#070706;
-    --bg-1:#0c0c0a;
-    --bg-2:#11110e;
-    --bg-3:#171511;
-    --paper:#eae3d6;
-    --paper-2:#d7cfc0;
-    --paper-3:#aaa196;
-    --ink:#70695f;
-    --red:#9d2f35;
-    --red-2:#b53d43;
-    --line:#201d1a;
-    --line-2:#2b2723;
-    --panel:#11100d;
-    --panel-2:#171511;
-    --panel-3:#1d1a17;
-    --glass:rgba(18,16,13,0.72);
-    --shadow:0 18px 38px rgba(0,0,0,0.45);
-    --serif:"Iowan Old Style","Baskerville","Georgia","Times New Roman",serif;
-    --sans:Inter,"Segoe UI",system-ui,-apple-system,sans-serif;
-  }
-
-  body {
-    background:
-      radial-gradient(circle at 15% 0%, rgba(157,47,53,0.18), transparent 24%),
-      radial-gradient(circle at 90% 20%, rgba(181,61,67,0.08), transparent 26%),
-      linear-gradient(180deg, var(--bg-1) 0%, var(--bg-0) 100%);
-    font-family:var(--sans);
-    letter-spacing:0.02em;
-  }
-
-  body::before {
-    content:"";
-    position:fixed;
-    inset:0;
-    pointer-events:none;
-    background:
-      linear-gradient(rgba(255,255,255,0.015), rgba(255,255,255,0.01)),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.01) 0 1px, transparent 1px 120px);
-    opacity:0.7;
-    mix-blend-mode:screen;
-  }
-
-  #app {
-    background:rgba(11,10,9,0.2);
-    backdrop-filter:blur(2px);
-  }
-
-  header#top {
-    background:linear-gradient(180deg, rgba(18,18,16,0.94), rgba(9,9,8,0.96));
-    border-bottom:1px solid rgba(234,227,214,0.06);
-    box-shadow:0 10px 24px rgba(0,0,0,0.26);
-    padding:10px 16px 9px;
-  }
-
-  .stamp {
-    border-color:rgba(181,61,67,0.95);
-    color:var(--red-2);
-    background:rgba(157,47,53,0.08);
-    letter-spacing:3.2px;
-    font-size:11px;
-    padding:2px 8px 1px;
-    box-shadow:inset 0 0 0 1px rgba(181,61,67,0.2);
-  }
-
-  .fileno {
-    font-size:11.5px;
-    color:var(--paper-3);
-    letter-spacing:1.4px;
-    text-transform:uppercase;
-  }
-
-  .fileno b {
-    color:var(--paper);
-    font-weight:700;
-    letter-spacing:1.8px;
-  }
-
-  .hbtn {
-    background:rgba(17,16,13,0.8);
-    border:1px solid rgba(234,227,214,0.08);
-    color:var(--paper-3);
-    transition:all 0.16s ease;
-    border-radius:2px;
-    letter-spacing:1.2px;
-    text-transform:uppercase;
-  }
-
-  .hbtn:hover {
-    border-color:rgba(181,61,67,0.7);
-    color:var(--paper);
-    background:rgba(31,24,22,0.9);
-    box-shadow:0 0 0 1px rgba(181,61,67,0.15);
-  }
-
-  .hbtn.on {
-    color:var(--paper);
-    border-color:rgba(181,61,67,0.7);
-    background:rgba(157,47,53,0.12);
-  }
-
-  .rankchip {
-    background:rgba(164,134,68,0.08);
-    border:1px solid rgba(164,134,68,0.42);
-    color:#d9c595;
-    border-radius:2px;
-    text-transform:uppercase;
-    letter-spacing:1.6px;
-  }
-
-  nav#tabs {
-    background:linear-gradient(180deg, rgba(12,12,10,0.96), rgba(15,15,13,0.95));
-    border-bottom:1px solid rgba(234,227,214,0.06);
-    gap:0;
-    padding:0 14px;
-    box-shadow:inset 0 -1px 0 rgba(234,227,214,0.02);
-  }
-
-  .tab {
-    position:relative;
-    font-family:var(--sans);
-    font-size:10.5px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    color:#7c7268;
-    border-bottom:2px solid transparent;
-    padding:11px 12px 10px;
-    min-height:42px;
-    background:transparent;
-  }
-
-  .tab:hover {
-    color:var(--paper-2);
-  }
-
-  .tab.active {
-    color:var(--paper);
-    border-bottom-color:var(--red-2);
-    background:linear-gradient(180deg, rgba(157,47,53,0.12), rgba(157,47,53,0.02));
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);
-  }
-
-  .tab .dot {
-    background:var(--red-2);
-    box-shadow:0 0 9px rgba(181,61,67,0.8);
-  }
-
-  main#view {
-    padding:18px 18px 36px;
-  }
-
-  .wrap {
-    max-width:1250px;
-  }
-
-  h1, h2, h3 {
-    font-family:var(--serif);
-    font-weight:500;
-    letter-spacing:0.04em;
-  }
-
-  h1 {
-    font-size:26px;
-    color:var(--paper);
-    text-transform:uppercase;
-    letter-spacing:0.14em;
-  }
-
-  h2 {
-    font-size:16px;
-    color:var(--paper);
-    letter-spacing:0.12em;
-    text-transform:uppercase;
-  }
-
-  h3 {
-    font-weight:600;
-    font-size:11.5px;
-    letter-spacing:0.24em;
-    color:#d7c8a7;
-    text-transform:uppercase;
-  }
-
-  .muted, .small, .panel .small, .doc .meta {
-    color:var(--paper-3);
-  }
-
-  .panel {
-    background:linear-gradient(180deg, rgba(23,21,17,0.96), rgba(9,9,8,0.96));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    box-shadow:var(--shadow);
-  }
-
-  .ecard {
-    background:linear-gradient(180deg, rgba(26,25,22,0.94), rgba(15,15,13,0.96));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);
-    transition:all 0.16s ease;
-  }
-
-  .ecard:hover {
-    border-color:rgba(181,61,67,0.7);
-    background:linear-gradient(180deg, rgba(34,27,25,0.97), rgba(17,14,12,0.98));
-    transform:translateY(-1px);
-  }
-
-  .ecard .et {
-    font-family:var(--serif);
-    font-size:13px;
-    color:var(--paper);
-    letter-spacing:0.04em;
-    margin-bottom:5px;
-  }
-
-  .ecard .ed {
-    color:var(--paper-3);
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    font-size:10px;
-  }
-
-  .tag {
-    border-radius:2px;
-    letter-spacing:1.6px;
-    text-transform:uppercase;
-    background:rgba(255,255,255,0.02);
-    border:1px solid rgba(234,227,214,0.08);
-    color:var(--paper-3);
-  }
-
-  .tag.red, .tag.green, .tag.amber {
-    border-width:1px;
-  }
-
-  .tag.red {
-    color:#e7b0a9;
-    border-color:rgba(181,61,67,0.66);
-    background:rgba(157,47,53,0.08);
-  }
-
-  .tag.amber {
-    color:#d8c58e;
-    border-color:rgba(201,167,94,0.6);
-    background:rgba(168,120,49,0.08);
-  }
-
-  .tag.green {
-    color:#b9cc9c;
-    border-color:rgba(94,118,78,0.7);
-    background:rgba(94,118,78,0.08);
-  }
-
-  .btn {
-    background:linear-gradient(180deg, rgba(24,22,19,0.98), rgba(13,13,11,0.98));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    color:var(--paper-2);
-    transition:all 0.16s ease;
-    letter-spacing:1.4px;
-    text-transform:uppercase;
-  }
-
-  .btn:hover:not(:disabled) {
-    border-color:rgba(181,61,67,0.7);
-    color:var(--paper);
-    background:linear-gradient(180deg, rgba(36,29,27,0.98), rgba(17,15,14,0.98));
-    box-shadow:0 0 0 1px rgba(181,61,67,0.12);
-  }
-
-  .btn.primary {
-    background:linear-gradient(180deg, rgba(81,38,34,0.96), rgba(34,19,18,0.96));
-    border-color:rgba(181,61,67,0.75);
-    color:#f5d9d0;
-  }
-
-  .btn.primary:hover:not(:disabled) {
-    background:linear-gradient(180deg, rgba(103,47,42,0.96), rgba(41,26,23,0.96));
-    color:#fff0ee;
-  }
-
-  .doc {
-    background:linear-gradient(180deg, rgba(236,228,211,0.96), rgba(216,208,188,0.96));
-    color:#201b15;
-    border:1px solid rgba(118,104,86,0.45);
-    box-shadow:0 18px 36px rgba(0,0,0,0.32);
-    border-radius:2px;
-  }
-
-  .doc h4 {
-    color:#1a1714;
-    border-bottom:1px solid rgba(78,66,52,0.36);
-    letter-spacing:0.24em;
-    text-transform:uppercase;
-    font-family:var(--serif);
-    font-size:12px;
-  }
-
-  .doc .meta {
-    color:#5b5347;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-  }
-
-  .doc .stampmark {
-    border-color:rgba(157,47,53,0.8);
-    color:rgba(157,47,53,0.8);
-    font-weight:700;
-  }
-
-  .sus,
-  .stat,
-  .phone,
-  .cam,
-  .panel .panel,
-  #sceneWrap,
-  #board,
-  #mapWrap,
-  .gantt,
-  .mapstage,
-  .netstage {
-    box-shadow:var(--shadow);
-  }
-
-  .sus {
-    background:linear-gradient(180deg, rgba(19,18,16,0.96), rgba(12,12,10,0.96));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    padding:14px;
-  }
-
-  .portrait,
-  .sd-portrait,
-  .si-portrait {
-    border:1px solid rgba(234,227,214,0.08);
-    background:linear-gradient(180deg, rgba(16,15,13,0.96), rgba(10,10,9,0.96));
-    box-shadow:inset 0 0 50px rgba(255,255,255,0.015);
-  }
-
-  .meter {
-    background:rgba(17,17,15,0.95);
-    border:1px solid rgba(234,227,214,0.08);
-    overflow:hidden;
-    border-radius:999px;
-  }
-
-  .meter i {
-    background:linear-gradient(90deg, rgba(115,140,86,0.9), rgba(198,163,90,0.95), rgba(157,47,53,0.96));
-    border-radius:999px;
-  }
-
-  input[type=range] {
-    accent-color:var(--red-2);
-  }
-
-  .phone {
-    background:linear-gradient(180deg, rgba(13,13,14,0.98), rgba(9,11,14,0.98));
-    border:8px solid rgba(23,22,26,0.98);
-    border-radius:22px;
-    box-shadow:0 24px 50px rgba(0,0,0,0.52);
-  }
-
-  .phone .status,
-  .phone .appbar,
-  .phoneTabs {
-    background:linear-gradient(180deg, rgba(17,18,20,0.96), rgba(10,12,14,0.98));
-    border-bottom:1px solid rgba(255,255,255,0.04);
-  }
-
-  .bub.them { background:rgba(40,51,58,0.96); }
-  .bub.me { background:rgba(25,76,62,0.96); }
-  .bub .t { color:#a5b0b5; }
-
-  .cam {
-    background:#070809;
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-  }
-
-  .camimg {
-    filter:contrast(1.18) brightness(0.82) grayscale(0.3) saturate(0.8);
-  }
-
-  .choice {
-    background:linear-gradient(180deg, rgba(24,22,19,0.94), rgba(15,14,12,0.96));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    padding:10px 12px;
-    color:var(--paper-2);
-    transition:0.16s ease;
-  }
-
-  .choice:hover {
-    border-color:rgba(181,61,67,0.7);
-    background:linear-gradient(180deg, rgba(39,29,26,0.96), rgba(18,14,12,0.98));
-    color:var(--paper);
-  }
-
-  .choice .tone {
-    color:#d7c59a;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-  }
-
-  .transcript {
-    border-left:2px solid rgba(234,227,214,0.12);
-    padding-left:12px;
-  }
-
-  .transcript .q { color:#d7c59a; }
-  .transcript .a { color:var(--paper); }
-
-  #sceneWrap,
-  #board,
-  #mapWrap,
-  .netstage,
-  .mapstage {
-    border:1px solid rgba(234,227,214,0.08);
-    background:linear-gradient(180deg, rgba(12,12,10,0.98), rgba(9,9,8,0.98));
-    border-radius:2px;
-    overflow:hidden;
-  }
-
-  .toolbtn {
-    background:rgba(22,20,18,0.9);
-    border:1px solid rgba(234,227,214,0.08);
-    color:var(--paper-3);
-    border-radius:2px;
-    letter-spacing:1.4px;
-    text-transform:uppercase;
-  }
-
-  .toolbtn.on {
-    color:#f5d7a5;
-    border-color:rgba(201,167,94,0.7);
-    background:rgba(110,78,29,0.12);
-  }
-
-  .pin {
-    background:linear-gradient(180deg, rgba(232,225,214,0.98), rgba(201,188,165,0.98));
-    border:1px solid rgba(41,34,29,0.7);
-    border-radius:2px;
-    color:#201c18;
-    box-shadow:0 12px 22px rgba(0,0,0,0.32);
-  }
-
-  .pin .pt {
-    color:#6d1f1d;
-    font-weight:700;
-    letter-spacing:0.16em;
-  }
-
-  .pin.sel {
-    outline:2px solid rgba(181,61,67,0.85);
-    box-shadow:0 0 0 3px rgba(181,61,67,0.13);
-  }
-
-  .pin.linking {
-    outline:2px dashed rgba(201,167,94,0.9);
-  }
-
-  .hot {
-    border:1px solid rgba(201,167,94,0.42);
-    background:rgba(201,167,94,0.06);
-    box-shadow:inset 0 0 12px rgba(201,167,94,0.08);
-  }
-
-  .hot:hover {
-    border-color:rgba(181,61,67,0.8);
-    background:rgba(181,61,67,0.14);
-  }
-
-  .hot i {
-    background:rgba(234,227,214,0.8);
-  }
-
-  .hot.found {
-    border-color:rgba(99,135,97,0.7);
-    background:rgba(79,130,79,0.12);
-  }
-
-  .hot.found i { background:rgba(174,212,163,0.95); }
-
-  .modal {
-    background:linear-gradient(180deg, rgba(16,15,13,0.99), rgba(10,10,9,0.99));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    box-shadow:0 26px 64px rgba(0,0,0,0.64);
-  }
-
-  .modal .x {
-    color:var(--paper-3);
-    opacity:0.8;
-  }
-
-  .toastitem {
-    background:linear-gradient(180deg, rgba(19,18,16,0.97), rgba(11,10,9,0.97));
-    border-left:3px solid rgba(201,167,94,0.9);
-    border-radius:2px;
-    box-shadow:0 14px 28px rgba(0,0,0,0.36);
-  }
-
-  .casehero {
-    padding:26px 0 18px;
-    border-bottom:1px solid rgba(234,227,214,0.06);
-  }
-
-  .casehero:before {
-    display:none;
-  }
-
-  .ch-kicker {
-    font-size:10.5px;
-    letter-spacing:0.28em;
-    color:var(--paper-3);
-    text-transform:uppercase;
-  }
-
-  .ch-title {
-    font-size:clamp(30px, 4.6vw, 62px);
-    line-height:0.96;
-    letter-spacing:0.03em;
-    font-family:var(--serif);
-    text-transform:none;
-    margin-top:10px;
-    max-width:12ch;
-  }
-
-  .ch-blurb {
-    font-family:var(--serif);
-    color:var(--paper-3);
-    font-style:italic;
-  }
-
-  .ch-meta {
-    font-size:10px;
-    letter-spacing:0.2em;
-    color:var(--paper-3);
-  }
-
-  .stat {
-    background:linear-gradient(180deg, rgba(19,18,17,0.96), rgba(11,11,10,0.96));
-    border:1px solid rgba(234,227,214,0.08);
-    border-radius:2px;
-    padding:12px 14px;
-  }
-
-  .stat .n {
-    font-family:var(--serif);
-    color:var(--paper);
-    font-size:26px;
-    letter-spacing:0.02em;
-  }
-
-  .stat .l {
-    color:#c5bfa9;
-    letter-spacing:0.18em;
-    text-transform:uppercase;
-    font-size:10px;
-  }
-
-  .casearchive .cc-title,
-  .cc-num,
-  .si-name,
-  .sd-name {
-    font-family:var(--serif);
-  }
-
-  .casearchive .casecard {
-    background:linear-gradient(180deg, rgba(20,19,16,0.96), rgba(10,10,9,0.96));
-  }
-
-  .casecard:hover {
-    box-shadow:0 14px 28px rgba(0,0,0,0.26);
-  }
-
-  .cc-type {
-    font-size:9px;
-    letter-spacing:0.24em;
-    color:var(--paper-3);
-  }
-
-  .cc-blurb {
-    color:var(--paper-3);
-  }
-
-  .sirow {
-    background:rgba(10,10,9,0.14);
-  }
-
-  .sirow:hover {
-    background:rgba(157,47,53,0.04);
-  }
-
-  .si-name {
-    color:var(--paper);
-    letter-spacing:0.02em;
-  }
-
-  .si-arrow {
-    color:#7e766d;
-  }
-
-  .sd-grid {
-    border-top:1px solid rgba(234,227,214,0.06);
-    border-bottom:1px solid rgba(234,227,214,0.06);
-  }
-
-  .sd-grid h3 {
-    color:#d7c59a;
-  }
-
-  .cx {
-    border:1px solid rgba(234,227,214,0.08);
-    background:rgba(17,15,13,0.8);
-    border-radius:2px;
-  }
-
-  .cx.open {
-    border-left:2px solid rgba(181,61,67,0.8);
-    background:rgba(60,28,28,0.18);
-  }
-
-  .sd-instinct .analog input[type=range]::-webkit-slider-thumb {
-    background:var(--red-2);
-  }
-
-  .sd-instinct .analog input[type=range]::-moz-range-thumb {
-    background:var(--red-2);
-  }
-
-  .gantt .gitem {
-    border-radius:2px;
-    border:1px solid rgba(234,227,214,0.08);
-    background:linear-gradient(180deg, rgba(31,31,28,0.9), rgba(22,20,18,0.9));
-  }
-
-  .gantt .gitem.ok {
-    background:linear-gradient(180deg, rgba(43,57,38,0.96), rgba(19,24,19,0.96));
-    border-color:rgba(128,160,100,0.7);
-  }
-
-  .gantt .gitem.lie {
-    background:linear-gradient(180deg, rgba(71,31,29,0.95), rgba(31,17,17,0.95));
-    border-color:rgba(181,61,67,0.7);
-  }
-
-  .mapstage .mpin .h {
-    background:linear-gradient(180deg, #c7a767, #8c6b2b);
-  }
-
-  .mapstage .mpin.ev .h {
-    background:linear-gradient(180deg, #c84a51, #8f2f32);
-  }
-
-  .modalbg {
-    background:rgba(0,0,0,0.72);
-    backdrop-filter:blur(3px);
-  }
-
-  .casehero.endhero {
-    border-bottom:0;
-    margin-bottom:0;
-  }
-
-  @media (max-width: 720px) {
-    nav#tabs {
-      background:linear-gradient(180deg, rgba(13,13,11,0.98), rgba(18,17,15,0.98));
-    }
-
-    .tab {
-      padding:10px 9px 9px;
-      font-size:9px;
-      letter-spacing:1.5px;
-    }
-
-    .ch-title {
-      max-width:none;
-    }
-  }
 </style>
 </head>
 <body>
@@ -1489,6 +808,7 @@ CASE1.inferences = [
   {a:"e_bolt",b:"e_window",t:"Kilitli oda bir yanılsama: sürgü dışarıdan itilmiş, pencere yangın merdivenine açık."}
 ];
 CASE1.redHerrings = ["e_dm","e_keys","e_cam3"];
+CASE1.hexWord = "ENJEKTOR"; CASE1.hexDecoys = ["YEDEKLEME","SUNUCU","GUNLUK","ARSIV"];
 
 /* ============================================================
    VAKA 2 — SON VAPUR (kayıp kişi)
@@ -1519,23 +839,33 @@ const CASE2 = {
     {id:"c2_mudur",name:"Rauf Ergin",role:"Okul müdürü",age:52,portrait:{skin:"#a87b58",hair:"#5a5148"},
      bio:"Dokuz yıldır aynı okulun müdürlüğünü yürütüyor ve kurbanın kısa süre önce kaleme aldığı şikâyet dilekçesi, tesadüf olmayacak biçimde doğrudan onu hedef alıyordu.",
      alibi:"“O saatte toplantıdaydım, en az on kişi bunu doğrulayabilir.”",
-     profile:"Kurumsal ve hazırlıklı bir üslupla konuşuyor, sanki her cümlesini önceden bir kez daha gözden geçirmiş gibi; ama sorgu kaydında geçen 'bu iş burada kapansın' cümlesi, bu soğukkanlılığın altında bir telaş olduğunu ele veriyor."},
+     profile:"Kurumsal ve hazırlıklı bir üslupla konuşuyor, sanki her cümlesini önceden bir kez daha gözden geçirmiş gibi; ama sorgu kaydında geçen 'bu iş burada kapansın' cümlesi, bu soğukkanlılığın altında bir telaş olduğunu ele veriyor.",
+     hist:["Dokuz yıllık müdürlük süresince iki kez benzer bir şikâyet dilekçesini 'kurum içinde' çözerek kapatmış.","Kurbanla dilekçe konusunda son bir ayda üç kez kapalı kapılar ardında görüşmüş.","Okul yönetim kurulu, sınav sorusu iddialarından haberdar olduğunu ama resmi işlem başlatmadığını doğruluyor."],
+     contra:["Toplantıda olduğunu söylediği saatin ilk on beş dakikasında salonda değildi; katılımcı listesi bunu doğruluyor."]},
     {id:"c2_ogr",name:"Yiğit Aslan",role:"Meslektaş",age:38,portrait:{skin:"#b98f6c",hair:"#241c14",beard:true},
      bio:"Kurbanla aynı zümrede görev yapıyor ve şikâyet dilekçesinde adı geçen ikinci, belki de asıl kişi de kendisiydi.",
      alibi:"“Vapura binmedim ki. İskelede bir sigara içtim, sonra da yürüyerek eve döndüm.”",
-     profile:"O akşam üzerinde koyu mavi, kalın bir yün mont olduğu — hem kendi ifadesinden hem çevredekilerden — doğrulanıyor; bu ayrıntı korkulukta bulunan kumaş parçasıyla rahatsız edici derecede örtüşüyor."},
+     profile:"O akşam üzerinde koyu mavi, kalın bir yün mont olduğu — hem kendi ifadesinden hem çevredekilerden — doğrulanıyor; bu ayrıntı korkulukta bulunan kumaş parçasıyla rahatsız edici derecede örtüşüyor.",
+     hist:["Son iki yılda üç kez, farklı sınavlarda soru sızıntısı iddialarıyla anılmış ama hiçbiri kanıtlanamamış.","Kurbanla son haftalarda mesai saatleri dışında da sık sık, kapalı kapılar ardında görüşmüş.","Maddi durumu son altı ayda beklenmedik biçimde iyileşmiş; yeni bir araç almış."],
+     contra:["Vapura hiç binmediğini söyledi, ama güvenlik kamerası onu tam da o saatte güvertede gösteriyor."]},
     {id:"c2_kardes",name:"Ece Sertöz",role:"Kız kardeş",age:29,portrait:{skin:"#c49a76",hair:"#2b2018",long:true},
      bio:"Kurbanın hayatta kalan tek yakını ve hayat sigortası poliçesinde tek lehtarı olarak görünüyor.",
      alibi:"“Evdeydim, dizi izliyordum, kimseyle konuşmadım.”",
-     profile:"Kaybolma ihbarını polise ilk yapan kişi oydu — üstelik ablasının vapurdan inmediğini fark etmesi için gereken süreden çok daha kısa bir sürede, neredeyse anında harekete geçmişti."},
+     profile:"Kaybolma ihbarını polise ilk yapan kişi oydu — üstelik ablasının vapurdan inmediğini fark etmesi için gereken süreden çok daha kısa bir sürede, neredeyse anında harekete geçmişti.",
+     hist:["Sigorta poliçesindeki lehtarlık üç ay önce, ablasının kendi isteğiyle güncellenmiş.","Son bir yılda kira borcu nedeniyle iki kez icra takibi yemiş.","Ablasıyla son görüşmesinde, 'bu akşam bir şey olursa Yiğit'e bak' sözünü duyduğunu belirtiyor."],
+     contra:[]},
     {id:"c2_kaptan",name:"Sedat Boran",role:"Vapur görevlisi",age:44,portrait:{skin:"#9c7250",hair:"#3a3630"},
      bio:"Vapurun arka rampasından sorumlu personel olarak görev yapıyor ve o rampanın kontrolü tamamen elinde.",
      alibi:"“Rampa o saatte kapalıydı, kimse oradan inmedi, bundan eminim.”",
-     profile:"Rampa kayıt defterinde tam da olayın yaşandığı saate denk gelen tek satır, sanki bilerek boş bırakılmış gibi duruyor."},
+     profile:"Rampa kayıt defterinde tam da olayın yaşandığı saate denk gelen tek satır, sanki bilerek boş bırakılmış gibi duruyor.",
+     hist:["On iki yıllık deneyimli bir personel; kayıt defterini tutma konusunda daha önce hiç ihmali olmamış.","Rampa açma yetkisini sadece 'acil durum' gerekçesiyle kullanabiliyor, ve o gece bu gerekçeyi kayda geçirmemiş.","Yiğit Aslan ile aynı spor kulübüne üye; birbirlerini yıllardır tanıyorlar."],
+     contra:[]},
     {id:"c2_eski",name:"Murat Kaya",role:"Eski eş",age:40,portrait:{skin:"#b58a68",hair:"#4a4238",glasses:true},
      bio:"Kurbanla üç yıl önce boşanmışlar ve o dönemden kalma bir uzaklaştırma kararı hâlâ yürürlükte.",
      alibi:"“O gece şehir dışındaydım, bunu kolayca kanıtlayabilirim.”",
-     profile:"İddia ettiği şehir dışı seyahatini doğrulaması gereken HGS geçiş kayıtları, garip bir biçimde ortada yok."}
+     profile:"İddia ettiği şehir dışı seyahatini doğrulaması gereken HGS geçiş kayıtları, garip bir biçimde ortada yok.",
+     hist:["Boşanma sürecinde kurbana yönelik iki ayrı şikâyet başvurusu kurbanın dosyasında kayıtlı.","Uzaklaştırma kararına rağmen son altı ayda iki kez kurbanın yaşadığı semtte görülmüş.","Sosyal medyada kurbanla ilgili öfkeli paylaşımlar yaptığı, sonradan sildiği tespit edilmiş."],
+     contra:[]}
   ],
   interrogation:{
     c2_mudur:[{q:"Dilekçede tam olarak ne yazıyordu?",tone:"BASKI",a:"“Sadece bir personel meselesiydi. Kurumun içinde kalması gereken, sıradan bir mesele.”",note:"Konuyu bilinçli biçimde 'iç mesele' diyerek küçültmeye çalışıyor.",gives:"c2_e_dilekce"},
@@ -1622,7 +952,8 @@ const CASE2 = {
   inferences:[{a:"c2_cloth",b:"c2_e_mont",t:"Korkulukta bulunan yün kumaş ile şüphelinin kendi ağzıyla tarif ettiği mont, renk ve doku olarak birebir örtüşüyor."},
     {a:"c2_blind",b:"c2_e_rampopen",t:"Kameraların hiç göremediği kör nokta ile olay saatinde açılan rampa birleşince, görünmez bir çıkış yolu ortaya çıkıyor."},
     {a:"c2_ticket",b:"c2_prints",t:"Turnikedeki ikinci geçiş ile bankın altındaki ikinci avuç izi, aynı gizli kişiye işaret ediyor gibi görünüyor."}],
-  redHerrings:["c2_e_clear","c2_e_dilekce"]
+  redHerrings:["c2_e_clear","c2_e_dilekce"],
+  hexWord:"RAMPA", hexDecoys:["ISKELE","BILET","KAMERA","VAPUR"]
 };
 
 /* ============================================================
@@ -1650,13 +981,29 @@ const CASE3 = {
   ]},
   suspects:[
     {id:"c3_sys",name:"Emre Baş",role:"Sistem yöneticisi",age:33,portrait:{skin:"#b58a68",hair:"#221b14",glasses:true},
-     bio:"Tüm sunucu erişimleri onda. 17 Mayıs gecesi ofisteki tek kişi.",alibi:"“Bakım yapıyordum, log'lar gösterir.”",profile:"Log'lara aşırı güveniyor — çünkü onları o yazıyor."},
+     bio:"Şirketin tüm sunucu erişim yetkileri onun üzerine kayıtlı ve 17 Mayıs gecesi ofiste kalan tek kişi de kendisiydi.",
+     alibi:"“Rutin bakım yapıyordum, sistem logları bunu zaten gösterir.”",
+     profile:"Loglara neredeyse dini bir güvenle atıfta bulunuyor — ki bu tuhaf, çünkü o logları hazırlayan da kendisi.",
+     hist:["Şirketin tüm kritik sistemlerine sınırsız erişimi olan tek kişi.","Altı ay önce, farkında olmadan bir güvenlik açığını haftalarca kapatmadığı ortaya çıkmış.","Transferden bir hafta önce, normal mesai dışında sunucuya beş kez giriş yapmış."],
+     contra:["Loglar üzerinde 'rutin bakım' diye geçen işlemlerin saatleri, gerçek giriş kayıtlarıyla birebir örtüşmüyor."]},
     {id:"c3_cfo",name:"Pelin Arda",role:"Mali işler müdürü",age:45,portrait:{skin:"#c49a76",hair:"#3a2b1f",long:true},
-     bio:"Transferi onaylayan ikinci imza.",alibi:"“Onayı patron istedi, ben sadece işledim.”",profile:"Kayıtlar onu doğruluyor."},
+     bio:"Şüpheli transferi onaylayan ikinci imzayı o atmış; kendi ifadesine göre yalnızca üstündeki talimatı uygulamış.",
+     alibi:"“Onayı patron istedi, ben sadece işlemi gerçekleştirdim.”",
+     profile:"Sorumluluğu üstüne atmadan, net ve tutarlı bir dille anlatıyor; kayıtlar da anlattıklarını büyük ölçüde doğruluyor.",
+     hist:["On yıldır aynı şirkette, tek bir disiplin soruşturması bile geçirmemiş.","Transfer talimatının yazılı değil sözlü geldiğini belirtiyor; bu da talimatı doğrulamayı zorlaştırıyor.","Talimatı veren kişinin kimliği konusunda ısrarla aynı ismi tekrarlıyor."],
+     contra:[]},
     {id:"c3_ex",name:"Tolga Şen",role:"Kovulmuş geliştirici",age:29,portrait:{skin:"#a97a56",hair:"#1b1611",beard:true},
-     bio:"Altı ay önce kovuldu. Erişimi kapatılmış görünüyor.",alibi:"“Artık o binaya giremem bile.”",profile:"Girmesine gerek yok — kod hâlâ onun yazdığı kod."},
+     bio:"Altı ay önce şirketten kovulmuş ve resmi kayıtlara göre tüm sistem erişimleri o gün itibarıyla kapatılmış.",
+     alibi:"“Artık o binaya girme yetkim bile yok, girmemin imkânı yok.”",
+     profile:"Fiziksel erişiminin olmadığını doğru söylüyor — ama sorun da tam olarak bu değil; yazdığı kodun hâlâ sistemde çalışıyor olması.",
+     hist:["Kovulma nedeni resmi olarak 'performans' gösterilse de, ayrılışından önce bir yetki tartışması yaşandığı biliniyor.","Sistemden ayrılmadan önce yazdığı bazı modüllerin belgelenmemiş 'arka kapı' işlevleri olduğu şüpheleniliyor.","Ayrıldıktan sonra, eski iş arkadaşlarıyla şirket içi sorunlar hakkında yazışmaya devam etmiş."],
+     contra:[]},
     {id:"c3_ort",name:"Selda Kurt",role:"Ortak",age:48,portrait:{skin:"#c09070",hair:"#4a3b2c",long:true},
-     bio:"Şirketin %35 ortağı. Kurucuyla anlaşmazlıkları var.",alibi:"“Yurt dışındaydım.”",profile:"Gerçekten yurt dışındaydı."}
+     bio:"Şirketin yüzde otuz beşlik hissesine sahip ortağı ve kurucuyla aralarında uzun süredir devam eden ciddi bir anlaşmazlık var.",
+     alibi:"“O tarihte yurt dışındaydım, pasaport kayıtlarım bunu gösterir.”",
+     profile:"Anlattıkları gerçekten doğrulanıyor; ama bu, olayı uzaktan planlamış olmayacağı anlamına gelmiyor.",
+     hist:["Kurucuyla şirketin satışı konusunda aylardır süren bir anlaşmazlık yaşıyor.","Şirketin zarar göstermesinin, kendi payına biçilen değeri düşüreceğini biliyor.","Yurt dışı seyahati, tam da transferin gerçekleştiği hafta planlanmış."],
+     contra:[]}
   ],
   interrogation:{
     c3_sys:[{q:"Log'ları kim yazıyor?",tone:"SAKİN",a:"“Sistem yazıyor.”",note:"Sistemi de o yapılandırıyor.",gives:"c3_e_logown"},
@@ -1720,7 +1067,8 @@ const CASE3 = {
   inferences:[{a:"c3_log",b:"c3_e_backdoor",t:"Silinmemiş hesap + yeniden yazılan log = içeriden erişim."},
     {a:"c3_safe",b:"c3_shift",t:"O gece ofisteki tek kişi kasayı açan ikinci kişiyle aynı."},
     {a:"c3_sticky",b:"c3_e_backdoor",t:"Nottaki şifre bakım hesabının şifresiyle aynı."}],
-  redHerrings:["c3_e_cfo_clear","c3_e_ort_clear"]
+  redHerrings:["c3_e_cfo_clear","c3_e_ort_clear"],
+  hexWord:"IBAN", hexDecoys:["FATURA","SUNUCU","PAROLA","YEDEK"]
 };
 
 /* ============================================================
@@ -1882,7 +1230,8 @@ const CASE4 = {
     noevidence:{title:"DOSYA İADE",txt:"Örüntüyü doğru sezmiş olabilirsin, ama savcılık dört ayrı olayı birbirine bağlayan somut kanıt istiyor, teori değil."}},
   inferences:[{a:"c4_accel",b:"c4_e_pattern",t:"Dört yangının hepsinde aynı hızlandırıcı maddenin kullanılması, bunların bağımsız kazalar değil tek bir failin işi olduğunu gösteriyor."},
     {a:"c4_note",b:"c4_e_motive",t:"Kurbanın dilekçesi ile Kadir'in sürdürdüğü örtük baskı, aynı teoriyi iki farklı kaynaktan doğruluyor."}],
-  redHerrings:["c4_selin","c4_behlul"]
+  redHerrings:["c4_selin","c4_behlul"],
+  hexWord:"KUNDAKCI", hexDecoys:["SIGORTA","BELEDIYE","DOSYA","RAPOR"]
 };
 
 /* ============================================================
@@ -2020,7 +1369,8 @@ const CASE5 = {
     noevidence:{title:"OTOPSİ YETERSİZ BULUNDU",txt:"Şüphen doğru olabilir, ama adli tıp zincirini tam kuramadan bir doğal ölüm raporunu bozduramazsın."}},
   inferences:[{a:"c5_needle",b:"c5_e_tox",t:"İnce uçlu enjeksiyon izi ile toksikoloji raporundaki madde, aynı olayın iki farklı kanıtı gibi görünüyor."},
     {a:"c5_report",b:"c5_e_asistan_admit",t:"Rapor taslağındaki suçlama ile asistanın katta bulunduğunu kabul etmesi, motiv ve fırsatı aynı kişide birleştiriyor."}],
-  redHerrings:["c5_hasta","c5_esi"]
+  redHerrings:["c5_hasta","c5_esi"],
+  hexWord:"DOZ", hexDecoys:["AMELIYAT","RAPOR","NOBET","ILAC"]
 };
 
 /* ============================================================
@@ -2170,7 +1520,8 @@ const CASE6 = {
     noevidence:{title:"MEKANİZMA KANITLANAMADI",txt:"Kanaldan giriş teorin doğru olabilir ama fiziksel kanıt zincirini tamamlamadan bir 'kilitli oda'yı mahkemede çözemezsin."}},
   inferences:[{a:"c6_vent",b:"c6_blind",t:"Aşınmış havalandırma vidası ile kapı önündeki kısmi kör nokta birleşince, kimseye görünmeden odaya ulaşmanın bir yolu ortaya çıkıyor."},
     {a:"c6_notebook",b:"c6_e_motive",t:"Kurbanın 'kanal — biri giriyor' notu ile doktorun ihale/itibar kaygısı, aynı tehdidin iki farklı izini oluşturuyor."}],
-  redHerrings:["c6_hasta","c6_guvenlik"]
+  redHerrings:["c6_hasta","c6_guvenlik"],
+  hexWord:"KANAL", hexDecoys:["PROTOKOL","REVIR","NOBET","KART"]
 };
 
 const CASES = [CASE1,CASE2,CASE3,CASE4,CASE5,CASE6];
@@ -2343,6 +1694,10 @@ function sfx(kind){
     const o=ctx.createOscillator(),g=ctx.createGain(); o.type="triangle"; o.frequency.value=1200+Math.random()*400;
     g.gain.setValueAtTime(.03,t); g.gain.exponentialRampToValueAtTime(.001,t+.05);
     o.connect(g);g.connect(ctx.destination);o.start();o.stop(t+.06);
+  } else if(kind==="unlock"){
+    const o=ctx.createOscillator(),g=ctx.createGain(); o.type="sine"; o.frequency.setValueAtTime(320,t);
+    o.frequency.exponentialRampToValueAtTime(880,t+.22); g.gain.setValueAtTime(.08,t);
+    g.gain.exponentialRampToValueAtTime(.001,t+.3); o.connect(g); g.connect(ctx.destination); o.start(); o.stop(t+.32);
   }
 }
 
@@ -2392,6 +1747,27 @@ function missingTabsFor(c){
   const visited=(CS().visited)||{};
   return requiredTabsFor(c).filter(k=>!visited[k]);
 }
+/* Sadece "sekmeye uğramak" yetmez — bazı mekanikler gerçekten SONUÇLANDIRILMALI.
+   Bunlardan biri bile eksikse itham kesinlikle kabul edilmez. */
+function solveTasksFor(c){
+  const cs=CS();
+  const tasks=[];
+  if(c.reconstruct) tasks.push({key:"recon",label:"Canlandırma doğru sırayla çözülmeli",done:!!cs.reconOk});
+  (c.ciphers||[]).forEach((cp,i)=>{
+    tasks.push({key:"cipher_"+cp.id,label:"Şifre çözülmeli: "+cp.title,done:!!cs.ciphers[cp.id]});
+  });
+  const linkCount=(cs.board&&cs.board.links)?cs.board.links.length:0;
+  tasks.push({key:"board",label:"Kanıt panosunda en az 2 bağlantı kurulmalı",done:linkCount>=2});
+  const forensicTools=(typeof FORENSIC!=="undefined"&&FORENSIC[c.id])||[];
+  forensicTools.forEach(t=>{
+    tasks.push({key:"forensic_"+t.id,label:"Laboratuvar karşılaştırması doğru numuneyle tamamlanmalı: "+t.title,done:!!(cs.forensic&&cs.forensic[t.id]&&cs.forensic[t.id].done)});
+  });
+  if(typeof DIGITAL!=="undefined" && DIGITAL[c.id] && DIGITAL[c.id].cloud && DIGITAL[c.id].cloud.items && DIGITAL[c.id].cloud.items.length){
+    tasks.push({key:"hexlock",label:"Bulut yedeğindeki şifreli blok çözülmeli (Dijital > Bulut)",done:!!cs.cloudUnlocked});
+  }
+  return tasks;
+}
+function missingTasksFor(c){ return solveTasksFor(c).filter(t=>!t.done); }
 
 function renderTabs(){
   const n=$("#tabs"); n.innerHTML="";
@@ -3171,13 +2547,17 @@ function viewAccuse(v){
   if(cs.solved){ return viewEnding(v); }
   const missing=missingTabsFor(c);
   const req=requiredTabsFor(c);
+  const missingTasks=missingTasksFor(c);
   const labelOf=k=>(TABS.find(t=>t.k===k)||{}).l || k.toUpperCase();
   v.appendChild(el("div","sec",`<h1>İtham</h1>
-    <p class="muted small">Kim, nasıl ve neden sorularının üçünü de cevaplaman gerekiyor. Yetersiz kanıtla ya da eksik incelemeyle savcılık dosyayı iade eder.</p>`));
+    <p class="muted small">Kim, nasıl ve neden sorularının üçünü de cevaplaman gerekiyor. Yetersiz kanıtla, eksik incelemeyle ya da yarım kalmış görevlerle savcılık dosyayı iade eder.</p>`));
   const checklist=el("div","panel");
   checklist.innerHTML=`<h3>İNCELEME KONTROL LİSTESİ</h3>
     <p class="small muted" style="margin-bottom:8px">Bu dosyayı kapatmadan önce aşağıdaki alanların hepsine en az bir kez uğramalısın.</p>
-    <div class="grid g3">${req.map(k=>`<div class="kv"><span>${esc(labelOf(k))}</span><b style="color:${missing.includes(k)?"var(--red2)":"var(--green)"}">${missing.includes(k)?"ZİYARET EDİLMEDİ":"TAMAMLANDI"}</b></div>`).join("")}</div>`;
+    <div class="grid g3">${req.map(k=>`<div class="kv"><span>${esc(labelOf(k))}</span><b style="color:${missing.includes(k)?"var(--red2)":"var(--green)"}">${missing.includes(k)?"ZİYARET EDİLMEDİ":"TAMAMLANDI"}</b></div>`).join("")}</div>
+    <h3 style="margin-top:16px">ÇÖZÜLMESİ GEREKEN GÖREVLER</h3>
+    <p class="small muted" style="margin-bottom:8px">Bunlar sadece "ziyaret" değil — gerçekten sonuçlandırılmalı.</p>
+    <div class="tasklist">${solveTasksFor(c).map(t=>`<div class="kv"><span>${esc(t.label)}</span><b style="color:${t.done?"var(--green)":"var(--red2)"}">${t.done?"TAMAMLANDI":"EKSİK"}</b></div>`).join("")}</div>`;
   v.appendChild(checklist);
   const p=el("div","panel");
   p.innerHTML=`<h3>1 · KİM</h3>
@@ -3207,6 +2587,11 @@ function viewAccuse(v){
       const stillMissing=missingTabsFor(c);
       if(stillMissing.length){
         toast("Önce şu alanları incele: "+stillMissing.map(labelOf).join(", "),"red");
+        return;
+      }
+      const stillMissingTasks=missingTasksFor(c);
+      if(stillMissingTasks.length){
+        toast("Eksik görev: "+stillMissingTasks[0].label,"red");
         return;
       }
       const need=c.solution.needEvidence.filter(x=>picked[x]).length;
@@ -3809,6 +3194,16 @@ input[type=range]{accent-color:var(--red2);height:18px}
 .mailrow.unread .fr:before{content:"●";color:var(--red2);margin-right:6px;font-size:9px}
 .simrow{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;border-bottom:1px dotted #23262f;font-size:11.5px}
 .cloudcard{border:1px solid var(--hair2);background:#151721;padding:10px;border-radius:2px}
+
+.hexgrid{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.hexrow{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding:11px 13px;background:#0d0e0c;border:1px solid var(--hair2);cursor:pointer;
+  font-family:var(--mono);text-align:left;transition:border-color .14s,background .14s}
+.hexrow:hover:not(:disabled){border-color:var(--accent);background:#141613}
+.hexrow:disabled{cursor:not-allowed}
+.hexcode{color:#7fa06b;font-size:11.5px;letter-spacing:1.5px;word-break:break-all}
+.hexdecode{color:var(--dimmer);font-size:10px;letter-spacing:1.5px;flex:0 0 auto}
+.hexrow:hover:not(:disabled) .hexdecode{color:var(--accent)}
 .badgeline{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
 
 /* ---------- EĞİTİM ---------- */
@@ -3837,7 +3232,8 @@ input[type=range]{accent-color:var(--red2);height:18px}
 .si-role{font-size:10.5px;color:var(--dimmer);margin-top:2px}
 .si-col{font-size:11px;color:var(--txt);display:none}
 .si-lbl{display:block;font-family:var(--mono);font-size:8.5px;letter-spacing:1.6px;color:var(--dimmer);margin-bottom:3px}
-.si-susp{display:flex;align-items:center;gap:0}
+.si-susp{gap:0}
+@media (min-width:760px){.si-susp{display:flex;align-items:center}}
 .si-susp .si-lbl{width:100%}
 .analog-mini{display:inline-block;width:40px;height:3px;background:#221f1a;position:relative;margin-right:6px;vertical-align:middle}
 .analog-mini i{position:absolute;top:-2px;left:var(--v);width:2px;height:7px;background:var(--red2)}
@@ -3968,6 +3364,13 @@ input[type=range]{accent-color:var(--red2);height:18px}
   .casecard{padding:14px}
   .cc-num{font-size:24px;min-width:30px}
   .cc-title{font-size:18px}
+
+  .sirow{grid-template-columns:26px 40px minmax(0,1fr) 16px;gap:10px;padding:11px 12px}
+  .si-num{font-size:15px}
+  .si-name{font-size:12px}
+  .si-role{font-size:9.5px}
+  .susdetail{gap:20px}
+  .sd-left{max-width:160px}
 }
 @media (max-width:420px){
   .hbtn{padding:5px 6px; font-size:9.5px}
@@ -4157,7 +3560,59 @@ const Q_TEMPLATES = [
    note:s=>`Pişmanlık ile suçluluk arasındaki çizgiyi kendisi de net ayıramıyor.`},
   {tone:"TEKNİK",q:s=>`Olay gecesi kullandığınız uygulamaların ekran süresi kayıtlarını ister misiniz görelim?`,
    a:s=>`“Görün isterseniz. Ama telefonumu bazen çantada unutuyorum, süre gerçeği yansıtmayabilir.”`,
-   note:s=>`Önceden bir kaçış cümlesi kurması, kayıtta beklemediği bir şey olabileceğinden çekindiğini gösteriyor.`}
+   note:s=>`Önceden bir kaçış cümlesi kurması, kayıtta beklemediği bir şey olabileceğinden çekindiğini gösteriyor.`},
+
+  {tone:"YÜZLEŞTİR",q:(s,ctx)=>`Dosyanda şu satır var: "${ctx.hist}" — bunu bana kendi ağzınla anlatır mısın?`,
+   a:(s,ctx)=>`“O mu... Evet, doğru. Ama sandığınız gibi değil, bağlamından koparılmış.”`,
+   note:(s,ctx)=>`'Bağlamından koparılmış' savunması, olguyu inkâr edemediği için anlamını değiştirmeye çalışıyor.`,contra:true},
+  {tone:"BASKI",q:(s,ctx)=>`"${ctx.hist}" — bu kaydı sildirmeye mi çalıştınız?`,
+   a:(s,ctx)=>`“Sildirmek mi? Hayır, öyle bir şey yapmadım. Kim söyledi bunu size?”`,
+   note:(s,ctx)=>`Suçlamayı reddederken kaynağı merak etmesi, kaydın varlığından zaten haberdar olduğunu gösteriyor.`},
+  {tone:"SAKİN",q:(s,ctx)=>`Dosyanızda "${ctx.hist}" diye geçiyor. Bunun olayla bir ilgisi var mı sizce?`,
+   a:(s,ctx)=>`“Yok. Kesinlikle yok. Bunu neden sorduğunuzu anlamıyorum ama tamamen alakasız.”`,
+   note:(s,ctx)=>`'Kesinlikle' ve 'tamamen' gibi aşırı vurgular, aslında ilgisi olabileceğinden çekindiğini düşündürüyor.`},
+  {tone:"EMPATİ",q:(s,ctx)=>`"${ctx.hist}" — bu sizin için zor bir dönem olmalı. Bahsetmek ister misiniz?`,
+   a:(s,ctx)=>`“Zor oldu, evet. Kimseyle konuşmadım bunu. Şimdi konuşmak da tuhaf geliyor açıkçası.”`,
+   note:(s,ctx)=>`Duygusal bir kapı aralandı; bu konuya geri dönmek ileride işe yarayabilir.`},
+  {tone:"BLÖF",q:(s,ctx)=>`"${ctx.hist}" konusunu araştırdık; bulduklarımız anlattığınızdan çok farklı.`,
+   a:(s,ctx)=>`“Ne buldunuz ki? ...Tamam, belki tam olarak öyle anlatmadım. Ama önemli bir şey değildi.”`,
+   note:(s,ctx)=>`'Tam olarak öyle anlatmadım' — ilk ifadesinin eksik ya da yanlış olduğunu üstü kapalı kabul ediyor.`,contra:true},
+  {tone:"TEKNİK",q:(s,ctx)=>`Kayıtlarımızda "${ctx.hist}" ile ilgili resmi bir belge var. Bunu görmek ister misiniz?`,
+   a:(s,ctx)=>`“Görebilirim. Ama o belgenin bağlamını bilmeden bir şey söylemem doğru olmaz.”`,
+   note:(s,ctx)=>`Belgeyi görmeden önce savunma hazırlığı yapması, içeriğini zaten tahmin ettiğini gösteriyor.`},
+  {tone:"SESSİZLİK",q:(s,ctx)=>`(Önüne sessizce "${ctx.hist}" yazan bir kağıt koyuyorsun, hiçbir şey söylemiyorsun.)`,
+   a:(s,ctx)=>`“Bunu nereden... Tamam. Bunun hakkında konuşmak istemiyordum ama sanırım artık zorunluyum.”`,
+   note:(s,ctx)=>`Sessiz yüzleştirme etkili oldu; savunma hazırlığı olmadan doğrudan tepki verdi.`,contra:true},
+  {tone:"YÜZLEŞTİR",q:(s,ctx)=>`İlk ifadenizde bundan hiç bahsetmediniz: "${ctx.hist}". Neden sakladınız?`,
+   a:(s,ctx)=>`“Saklamadım, önemli görmedim. Her ayrıntıyı anlatmak zorunda mıyım?”`,
+   note:(s,ctx)=>`Teknik olarak haklı bir itiraz, ama tam da soruşturmanın odağındaki bir ayrıntıyı 'önemsiz' sayması dikkat çekici.`,contra:true},
+  {tone:"BASKI",q:(s,ctx)=>`"${ctx.hist}" ile kurbanın ölümü arasında bir bağlantı kurmamamı mı istiyorsunuz?`,
+   a:(s,ctx)=>`“Bağlantı yok çünkü öyle bir şey yok. Siz bağlantı kurmaya çalışıyorsunuz, ben değil.”`,
+   note:(s,ctx)=>`Savunma tonu sertleşiyor; doğrudan suçlama karşısında saldırgan bir tavra geçti.`},
+  {tone:"SAKİN",q:(s,ctx)=>`Size bir de şunu sorayım: "${ctx.hist2||ctx.hist}" doğru mu?`,
+   a:(s,ctx)=>`“Doğru. Ama bunun neresi suç, anlamıyorum. Herkesin bir geçmişi var.”`,
+   note:(s,ctx)=>`Olguyu doğrudan kabul ediyor; savunması olgunun kendisi değil, önemsizliği üzerine kurulu.`},
+  {tone:"EMPATİ",q:(s,ctx)=>`Kurban bu konuyu — "${ctx.hist}" — biliyor muydu sizce?`,
+   a:(s,ctx)=>`“Bilmiyorum. Belki biliyordu. Bunu düşünmek bile içimi acıtıyor şu an.”`,
+   note:(s,ctx)=>`Kurbanın bilip bilmediği belirsiz bırakılıyor; bu, motiv açısından önemli bir boşluk.`},
+  {tone:"TEKNİK",q:s=>`Sosyal medya hesaplarınızdaki silinmiş gönderileri geri getirebiliyoruz, biliyor muydunuz?`,
+   a:s=>`“Bilmiyordum. ...Silinmiş bir şey varsa bir nedeni vardır herhalde, ama hatırlamıyorum ne olduğunu.”`,
+   note:s=>`'Hatırlamıyorum' cevabı inandırıcı değil; silme eylemi genelde bilinçli bir kararla yapılır.`,contra:true},
+  {tone:"BLÖF",q:s=>`Bir tanık sizi olay gecesi farklı bir yerde gördüğünü iddia ediyor.`,
+   a:s=>`“Kim? Hangi tanık? Böyle bir şey olamaz, ben anlattığım yerdeydim.”`,
+   note:s=>`Tanığın kimliğini sorması doğal bir tepki, ama 'olamaz' derken fazla kesin konuşuyor.`,contra:true},
+  {tone:"SESSİZLİK",q:s=>`(Notlarını karıştırıyorsun, sanki başka bir şey arıyormuş gibi davranıyorsun.)`,
+   a:s=>`“Bir şey mi buldunuz? Söylesenize, bu bekleyiş dayanılmaz.”`,
+   note:s=>`Beklenmedik bir sabırsızlık gösterdi; saklayacak bir şeyi olan biri genelde sessizlikten rahatsız olur.`},
+  {tone:"YÜZLEŞTİR",q:s=>`Aynı soruyu üç farklı şekilde sordum, üç farklı cevap aldım. Hangisi gerçek?`,
+   a:s=>`“Hepsi gerçek, siz farklı yorumluyorsunuz sadece. Ama... tamam, belki bir tanesi tam doğru değildi.”`,
+   note:s=>`Sonunda birinin 'tam doğru olmadığını' kabul etmesi, ifadesinin bir yerinde çatlak olduğunu gösteriyor.`,contra:true},
+  {tone:"BASKI",q:s=>`Avukat tutmadınız. Neden? Suçsuz olduğunuza bu kadar mı eminsiniz, yoksa bir şey mi saklıyorsunuz?`,
+   a:s=>`“Suçsuzum çünkü avukata ihtiyacım yok. Basit bu kadar.”`,
+   note:s=>`Mantıksal olarak zayıf bir gerekçe; suçsuzluk avukat tutmamayı gerektirmez, bu abartılı bir güven işareti.`},
+  {tone:"EMPATİ",q:s=>`Bu süreç bittiğinde ilk yapmak istediğiniz şey ne?`,
+   a:s=>`“Uzaklaşmak. Herkesten, her şeyden. Sadece bunun bitmesini istiyorum.”`,
+   note:s=>`Kaçış arzusu hem masum bir yorgunluk hem de bir suçluluk işareti olarak okunabilir.`}
 ];
 
 function procState(sid){
@@ -4172,9 +3627,17 @@ function procQuestions(sid){
   const pool=Q_TEMPLATES.slice();
   const out=[];
   const n=4+Math.floor(r()*2);
+  const dep=SUS_DEPTH[sid]||{};
+  const histPool=(s.hist||[]).concat(dep.hist||[]);
+  const contraPool=(s.contra||[]).concat(dep.contra||[]);
   for(let i=0;i<n&&pool.length;i++){
     const idx=Math.floor(r()*pool.length); const t=pool.splice(idx,1)[0];
-    out.push({key:"p"+st.route+"_"+i,tone:t.tone,q:t.q(s),a:t.a(s),note:t.note(s),contra:!!t.contra});
+    const ctx={
+      hist: histPool.length? histPool[Math.floor(r()*histPool.length)] : "geçmişinizdeki bir ayrıntı",
+      contra: contraPool.length? contraPool[Math.floor(r()*contraPool.length)] : null,
+      hist2: histPool.length>1? histPool[Math.floor(r()*histPool.length)] : null
+    };
+    out.push({key:"p"+st.route+"_"+i,tone:t.tone,q:t.q(s,ctx),a:t.a(s,ctx),note:t.note(s,ctx),contra:!!t.contra});
   }
   return out;
 }
@@ -4647,6 +4110,13 @@ function viewInterro(v){
   rack.appendChild(nb);
   v.appendChild(rack);
 
+  if(st.lockUntil && st.lockUntil>Date.now()){
+    const banner=el("div","panel","<b style='color:var(--red2)'>ŞÜPHELİ ŞU AN KONUŞMUYOR</b> — yanlış/alakasız bir kanıt sunuldu, savunmaya geçti. Diğer şüphelilerle devam edebilirsin.");
+    banner.style.marginBottom="14px"; banner.style.borderLeft="2px solid var(--red)";
+    v.appendChild(banner);
+  }
+  const locked = st.lockUntil && st.lockUntil>Date.now();
+
   const grid=el("div","iq");
   const left=el("div","");
   const fixed=(c.interrogation[cur]||[]);
@@ -4659,13 +4129,14 @@ function viewInterro(v){
   fixed.forEach((q,i)=>{
     if(interroTone!=="HEPSİ" && q.tone!==interroTone) return;
     shown++;
-    const used=asked.includes(i), locked=q.requires&&!has(q.requires);
-    const b=el("button","qcard"+(used?" used":"")+(locked?" lock":""));
-    b.innerHTML=`<span class="tn ${esc(q.tone)}">${esc(q.tone)}</span><span class="rt">${used?"SORULDU":locked?"KİLİTLİ":"DOSYA HATTI"}</span>
+    const used=asked.includes(i), qlocked=q.requires&&!has(q.requires);
+    const b=el("button","qcard"+(used?" used":"")+(qlocked||locked?" lock":""));
+    b.innerHTML=`<span class="tn ${esc(q.tone)}">${esc(q.tone)}</span><span class="rt">${used?"SORULDU":locked?"SUSUYOR":qlocked?"KİLİTLİ":"DOSYA HATTI"}</span>
       <span class="qt">${esc(q.q)}</span>`;
     b.onclick=()=>{
       if(used){toast("Bu soru soruldu.","red");return;}
-      if(locked){toast("Bu soru için önce ilgili kanıta ulaşmalısın.","red");return;}
+      if(locked){toast("Şüpheli şu an konuşmuyor.","red");return;}
+      if(qlocked){toast("Bu soru için önce ilgili kanıta ulaşmalısın.","red");return;}
       (cs.asked[cur]=cs.asked[cur]||[]).push(i); S.points+=4;
       st.pressure=Math.min(100,st.pressure+14);
       if(q.gives) addEv(q.gives);
@@ -4685,10 +4156,10 @@ function viewInterro(v){
     if(interroTone!=="HEPSİ" && q.tone!==interroTone) return;
     pshown++;
     const used=!!st.asked[q.key];
-    const b=el("button","qcard"+(used?" used":""));
+    const b=el("button","qcard"+(used?" used":"")+(locked?" lock":""));
     b.innerHTML=`<span class="tn ${esc(q.tone)}">${esc(q.tone)}</span><span class="rt">${used?"SORULDU":q.contra?"ÇELİŞKİ AÇABİLİR":"ÜRETİLDİ"}</span>
       <span class="qt">${esc(q.q)}</span>`;
-    b.onclick=()=>{ if(used){toast("Bu soru soruldu.","red");return;} procAsk(cur,q); render(); };
+    b.onclick=()=>{ if(used){toast("Bu soru soruldu.","red");return;} if(locked){toast("Şüpheli şu an konuşmuyor.","red");return;} procAsk(cur,q); render(); };
     pbox.appendChild(b);
   });
   if(!pshown) pbox.appendChild(el("p","small muted","Bu tonda üretilmiş soru yok — tonu değiştir ya da rotayı yenile."));
@@ -4721,13 +4192,34 @@ function viewInterro(v){
     <div class="small muted" style="margin-top:8px">AÇILAN ÇELİŞKİ: <b>${st.contra.length}</b></div>
     </div>
     <div class="panel" style="margin-top:14px"><h3>İfadeyi yüzüne vur</h3>
-      <p class="small muted">Bir kanıtı doğrudan sun; baskı yükselir.</p>
-      <div class="row" id="cfr">${confront.map(e=>`<button class="btn sm ghost" data-cf="${esc(e.id)}">${esc(e.title)}</button>`).join("")||"<span class='small muted'>Kanıt yok</span>"}</div>
+      <p class="small muted">Bir kanıtı doğrudan sun; baskı yükselir. <b style="color:var(--red2)">Ama alakasız bir kanıt sunarsan şüpheli savunmaya geçer ve seni bir süre susturur.</b></p>
+      <div class="row" id="cfr">${confront.map(e=>`<button class="btn sm ghost" data-cf="${esc(e.id)}" ${st.lockUntil&&st.lockUntil>Date.now()?"disabled":""}>${esc(e.title)}</button>`).join("")||"<span class='small muted'>Kanıt yok</span>"}</div>
+      ${st.lockUntil&&st.lockUntil>Date.now()?`<div class="small" style="color:var(--red2);margin-top:8px" id="lockClock">ŞÜPHELİ SUSUYOR — ${Math.ceil((st.lockUntil-Date.now())/1000)} sn</div>`:""}
     </div>`;
   grid.appendChild(left); grid.appendChild(right); v.appendChild(grid);
+  if(st.lockUntil&&st.lockUntil>Date.now()){
+    const lc=$("#lockClock",right);
+    const iv=setInterval(()=>{
+      const left=Math.ceil((st.lockUntil-Date.now())/1000);
+      if(left<=0){ clearInterval(iv); render(); return; }
+      if(lc) lc.textContent="ŞÜPHELİ SUSUYOR — "+left+" sn";
+    },500);
+  }
   setTimeout(()=>{
     right.querySelectorAll("[data-cf]").forEach(b=>b.onclick=()=>{
+      if(st.lockUntil && st.lockUntil>Date.now()){ toast("Şüpheli şu an konuşmuyor. Bekle.","red"); return; }
       const e=evOf(b.dataset.cf); if(!e)return;
+      const sol=c.solution||{};
+      const isKeyEvidence = (sol.needEvidence||[]).includes(e.id);
+      if(!isKeyEvidence){
+        // alakasız/yanlış kanıt: ceza — şüpheli 45 sn susar, baskı düşer
+        st.strikes=(st.strikes||0)+1;
+        st.pressure=Math.max(0,st.pressure-15);
+        st.lockUntil=Date.now()+45000;
+        toast("YANLIŞ KANIT — şüpheli savunmaya geçti, 45 saniye konuşmuyor. ("+st.strikes+". hatalı sunum)","red");
+        sfx("stamp"); save(); render();
+        return;
+      }
       st.pressure=Math.min(100,st.pressure+18);
       const key="cf_"+e.id;
       if(!st.asked[key]){
@@ -4813,7 +4305,7 @@ function viewCamera(v){
   grid.appendChild(lef);
 
   const rig=el("div","");
-  const solved=(adj.c>1.5||adj.b<.65);
+  const solved=(adj.c>1.55 && adj.b<.72);
   rig.innerHTML=`<div class="panel"><h3>Sinyal işleme</h3>
       <div class="small muted">KONTRAST <b id="vcc">${Math.round(adj.c*100)}</b></div>
       <input type="range" min="80" max="240" value="${adj.c*100}" id="cc" style="width:100%">
@@ -4829,14 +4321,14 @@ function viewCamera(v){
       <div class="small" style="color:var(--paper2)">${esc(cm.caption)}</div>
       <hr class="rule">
       <div class="small" id="det" style="color:${solved?"var(--amber)":"var(--dimmer)"}">
-        ${solved?esc(cm.detail):"Sinyal yetersiz. Kontrastı yükselt ya da parlaklığı düşür."}</div>
+        ${solved?esc(cm.detail):"Sinyal yetersiz. Kontrastı VE parlaklığı birlikte, dengeli şekilde ayarlamalısın."}</div>
       <div class="row" style="margin-top:10px"><button class="btn primary sm" id="take" ${has(cm.id)?"disabled":""}>${has(cm.id)?"PANODA":"KANIT OLARAK AL"}</button></div>
     </div>
     <div class="panel" style="margin-top:14px"><h3>Kayıt bilgisi</h3>
       <div class="kv"><span>Kanal</span><b>${esc(cm.cam)}</b></div>
       <div class="kv"><span>Zaman damgası</span><b>${esc(cm.time)}</b></div>
-      <div class="kv"><span>Görülen kişi</span><b>${esc(cm.person?(suspectOf(cm.person)||{name:"?"}).name:"tanımsız")}</b></div>
-      <div class="kv"><span>Bütünlük</span><b>${esc(cm.detail&&/atl|boşluk|silin/i.test(cm.detail)?"ŞÜPHELİ":"SAĞLAM")}</b></div>
+      <div class="kv"><span>Görülen kişi</span><b>${solved?esc(cm.person?(suspectOf(cm.person)||{name:"?"}).name:"tanımsız"):"İŞLENMEMİŞ SİNYAL"}</b></div>
+      <div class="kv"><span>Bütünlük</span><b>${solved?esc(cm.detail&&/atl|boşluk|silin/i.test(cm.detail)?"ŞÜPHELİ":"SAĞLAM"):"—"}</b></div>
     </div>`;
   grid.appendChild(rig); v.appendChild(grid);
   setTimeout(()=>{
@@ -4849,7 +4341,7 @@ function viewCamera(v){
       $(".osd .d",mon).textContent="GAIN "+Math.round(cc*100)+" · LUM "+Math.round(cb*100);
       const ok=(cc>1.5||cb<.65);
       const det=$("#det",rig);
-      det.textContent=ok?cm.detail:"Sinyal yetersiz. Kontrastı yükselt ya da parlaklığı düşür.";
+      det.textContent=ok?cm.detail:"Sinyal yetersiz. Kontrastı VE parlaklığı birlikte, dengeli şekilde ayarlamalısın.";
       det.style.color=ok?"var(--amber)":"var(--dimmer)";
       $("#enh",rig).style.width=(ok?100:Math.min(90,Math.round(cc*40+(1-cb)*40)))+"%";
       save();
@@ -5157,31 +4649,44 @@ function viewLabPro(v){
     const d=el("div","panel"+(have?"":" locked"));
     const sel=st&&st.sel!=null?st.sel:0;
     const sample=t.samples[sel];
+    const correctIdx=t.samples.reduce((best,x,i,arr)=>x.m>arr[best].m?i:best,0);
     const nameOf=x=>x.sid?((suspectOf(x.sid)||{name:x.sid}).name):x.tool;
+    const wrongTry=st&&st.wrongSel===sel;
     d.innerHTML=`<div class="row" style="justify-content:space-between">
         <h3 style="margin:0">${esc(t.title)}</h3>
         <span class="tag ${st&&st.done?"green":have?"amber":""}">${st&&st.done?"RAPOR HAZIR":have?"HAZIR":"NUMUNE YOK"}</span></div>
       <div class="small muted" style="margin:6px 0">Referans: ${esc(t.ref.label)} · gerekli numune: ${esc((evOf(t.need)||{}).title||t.need)}</div>
       <div class="cmp">
         <div class="cmpbox"><div class="t">REFERANS</div>${traceSVG(t.ref.seed,"#c8a45c",1.2)}</div>
-        <div class="cmpbox"><div class="t">KARŞILAŞTIRILAN — ${esc(nameOf(sample))}</div>${traceSVG(t.ref.seed+(sel+1)*13,(st&&st.done&&sel===t.samples.reduce((a,b,i)=>t.samples[a].m>b.m?a:i,0))?"#5f8c4d":"#8fa6b5",2.4)}</div>
+        <div class="cmpbox"><div class="t">KARŞILAŞTIRILAN — ${esc(nameOf(sample))}</div>${traceSVG(t.ref.seed+(sel+1)*13,(st&&st.done)?"#5f8c4d":"#8fa6b5",2.4)}</div>
       </div>
-      <div class="row" style="margin-top:10px">${t.samples.map((x,i)=>`<button class="btn sm ${i===sel?"primary":"ghost"}" data-s="${i}">${esc(nameOf(x))}</button>`).join("")}</div>
+      <div class="row" style="margin-top:10px">${t.samples.map((x,i)=>`<button class="btn sm ${i===sel?"primary":"ghost"}" data-s="${i}" ${st&&st.done?"disabled":""}>${esc(nameOf(x))}</button>`).join("")}</div>
       ${st&&st.done?`<div style="margin-top:10px"><div class="small muted">UYUM ORANI · %${sample.m}</div>
         <div class="matchbar"><i style="width:${sample.m}%"></i></div>
         <div class="doc" style="margin-top:10px"><div class="stampmark">RAPOR</div><h4>${esc(t.title)}</h4>
         <div class="meta">ADLİ TIP / KRİMİNAL LABORATUVAR</div><p>${esc(t.gives.body)}</p><p>${esc(t.fiber)}</p></div></div>`
         :`<div class="row" style="margin-top:10px"><button class="btn primary sm" id="run_${t.id}" ${have?"":"disabled"}>ANALİZİ ÇALIŞTIR</button>
-          <span class="small muted">${have?"~4 sn":"Önce ilgili numuneyi topla"}</span></div>`}`;
+          <span class="small muted">${have?"Doğru numuneyi seçtiğinden emin ol":"Önce ilgili numuneyi topla"}</span></div>
+          ${wrongTry?`<div class="small" style="color:var(--red2);margin-top:6px">SONUÇ: BELİRSİZ — bu numune referansla eşleşmiyor. Uyum oranı düşük çıktı (%${sample.m}); başka bir numune dene.</div>`:""}
+          ${st&&st.attempts?`<div class="small muted" style="margin-top:4px">Deneme sayısı: ${st.attempts}</div>`:""}`}`;
     g.appendChild(d);
     setTimeout(()=>{
-      d.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ cs.forensic[t.id]=Object.assign({},cs.forensic[t.id],{sel:+b.dataset.s}); save(); render(); });
+      d.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ cs.forensic[t.id]=Object.assign({},cs.forensic[t.id],{sel:+b.dataset.s,wrongSel:null}); save(); render(); });
       const rb=$("#run_"+t.id,d);
       if(rb) rb.onclick=()=>{
         rb.disabled=true; rb.textContent="ANALİZ SÜRÜYOR…";
-        setTimeout(()=>{ cs.forensic[t.id]=Object.assign({sel:sel},cs.forensic[t.id],{done:true});
-          regEv(c,t.gives.id,t.gives); addEv(t.gives.id);
-          toast("KARŞILAŞTIRMA TAMAMLANDI — "+t.title,"green"); save(); render(); },4000);
+        setTimeout(()=>{
+          const attempts=((st&&st.attempts)||0)+1;
+          if(sel===correctIdx){
+            cs.forensic[t.id]=Object.assign({sel:sel,attempts},cs.forensic[t.id],{done:true,wrongSel:null});
+            regEv(c,t.gives.id,t.gives); addEv(t.gives.id);
+            toast("KARŞILAŞTIRMA TAMAMLANDI — "+t.title,"green");
+          } else {
+            cs.forensic[t.id]=Object.assign({},cs.forensic[t.id],{sel:sel,attempts,wrongSel:sel,done:false});
+            toast("SONUÇ BELİRSİZ — bu numune eşleşmiyor, başka bir şüpheliyi dene.","red");
+          }
+          save(); render();
+        },4000);
       };
     },0);
   });
@@ -5190,6 +4695,38 @@ function viewLabPro(v){
 
 /* ---------------- DİJİTAL ARŞİV ---------------- */
 let digTab="mail";
+/* ---------------- HEX ŞİFRE ÇÖZME MİNİ-OYUNU (bulut yedek kilidi) ---------------- */
+function toHex(s){ return Array.from(s).map(c=>c.charCodeAt(0).toString(16).padStart(2,"0")).join(" "); }
+function openHexPuzzle(c){
+  const cs=CS();
+  const real = (c.hexWord)||"KANIT";
+  const decoys = (c.hexDecoys)||["YALAN","BOŞLUK","GÜRÜLTÜ","SAHTE"];
+  const words = shuffleArr([real,...decoys]).slice(0,5);
+  if(!words.includes(real)) words[0]=real;
+  const shuffled = shuffleArr(words);
+  const html = `<h2>ŞİFRELİ BLOK — HEX AYRIŞTIRICI</h2>
+    <p class="small muted">Bozuk yedek, birden çok olası bloğa ayrıştı. Akan hex dizilerinden gerçek veriyi taşıyanı seç — diğerleri gürültü/çöp veridir. Yanlış seçim bloğu bozar, tekrar denemen gerekir.</p>
+    <div class="hexgrid" id="hexgrid">${shuffled.map((w,i)=>`
+      <button class="hexrow" data-w="${esc(w)}">
+        <span class="hexcode">${esc(toHex(w))}</span>
+        <span class="hexdecode">ÇÖZ →</span>
+      </button>`).join("")}</div>
+    <p class="small muted" style="margin-top:10px" id="hexmsg"></p>`;
+  const {bg,m:box}=modal(html);
+  box.querySelectorAll("[data-w]").forEach(b=>b.onclick=()=>{
+    if(b.dataset.w===real){
+      CS().cloudUnlocked=true; save();
+      $("#hexmsg",box).innerHTML="<span style='color:var(--green)'>BLOK ÇÖZÜLDÜ: "+esc(real)+"</span> — yedek artık erişilebilir.";
+      toast("HEX BLOK ÇÖZÜLDÜ — bulut yedeği açıldı","green");
+      sfx("unlock");
+      setTimeout(()=>{ bg.remove(); render(); },900);
+    } else {
+      $("#hexmsg",box).innerHTML="<span style='color:var(--red2)'>YANLIŞ BLOK — gürültü verisiydi. Tekrar dene.</span>";
+      b.disabled=true; b.style.opacity=.35;
+      sfx("stamp");
+    }
+  });
+}
 function viewDigital(v){
   const c=C(),cs=CS(),D=DIGITAL[c.id];
   hd(v,"DİJİTAL DELİL ARŞİVİ","Telefon dışı dijital dosyalar",
@@ -5231,17 +4768,29 @@ function viewDigital(v){
     setTimeout(()=>{const b=$("#simadd",f); if(b)b.onclick=()=>{regEv(c,D.sim.ev.id,D.sim.ev);addEv(D.sim.ev.id);render();};},0);
   } else {
     const wrap=el("div",""); wrap.style.padding="12px"; wrap.className="grid g2";
-    D.cloud.items.forEach(it=>{
+    D.cloud.items.forEach((it,idx)=>{
+      const isLocked = idx===0 && !cs.cloudUnlocked;
       const d=el("div","cloudcard");
-      d.innerHTML=`<div style="color:var(--paper2);font-size:12.5px">${esc(it.t)}</div>
-        <div class="small muted">Yedek: ${esc(it.d)}</div>
-        <div class="small" style="margin-top:6px">${esc(it.x)}</div>
-        <div class="badgeline"><span class="tag">BULUT</span>${has(it.ev.id)?"<span class='tag green'>PANODA</span>":"<span class='tag amber'>ALINMADI</span>"}</div>
-        <div class="row" style="margin-top:8px"><button class="btn sm" data-c="${esc(it.ev.id)}" ${has(it.ev.id)?"disabled":""}>GERİ YÜKLE VE PANOYA EKLE</button></div>`;
-      d.querySelector("[data-c]").onclick=()=>{ regEv(c,it.ev.id,it.ev); addEv(it.ev.id); render(); };
+      if(isLocked){
+        d.innerHTML=`<div style="color:var(--paper2);font-size:12.5px">${esc(it.t)}</div>
+          <div class="small muted">Yedek: ${esc(it.d)}</div>
+          <div class="small" style="margin-top:6px;color:var(--red2)">ŞİFRELİ YEDEK — erişim için önce blok bütünlüğünü doğrula.</div>
+          <div class="badgeline"><span class="tag red">KİLİTLİ</span></div>
+          <div class="row" style="margin-top:8px"><button class="btn sm primary" data-hex="${idx}">ŞİFRE ÇÖZÜCÜYÜ AÇ</button></div>`;
+      } else {
+        d.innerHTML=`<div style="color:var(--paper2);font-size:12.5px">${esc(it.t)}</div>
+          <div class="small muted">Yedek: ${esc(it.d)}</div>
+          <div class="small" style="margin-top:6px">${esc(it.x)}</div>
+          <div class="badgeline"><span class="tag">BULUT</span>${has(it.ev.id)?"<span class='tag green'>PANODA</span>":"<span class='tag amber'>ALINMADI</span>"}</div>
+          <div class="row" style="margin-top:8px"><button class="btn sm" data-c="${esc(it.ev.id)}" ${has(it.ev.id)?"disabled":""}>GERİ YÜKLE VE PANOYA EKLE</button></div>`;
+      }
       wrap.appendChild(d);
     });
     box.appendChild(wrap);
+    setTimeout(()=>{
+      wrap.querySelectorAll("[data-c]").forEach(b=>b.onclick=()=>{ const it=D.cloud.items.find(x=>x.ev.id===b.dataset.c); regEv(c,it.ev.id,it.ev); addEv(it.ev.id); render(); });
+      wrap.querySelectorAll("[data-hex]").forEach(b=>b.onclick=()=>openHexPuzzle(c));
+    },0);
   }
   v.appendChild(box);
 }
