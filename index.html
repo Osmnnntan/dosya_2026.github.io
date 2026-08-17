@@ -43,7 +43,7 @@ button{cursor:pointer;background:none;border:none}
   background:repeating-linear-gradient(to bottom,rgba(0,0,0,.16) 0 1px,transparent 1px 3px)}
 #vign{position:fixed;inset:0;pointer-events:none;z-index:8999;
   background:radial-gradient(ellipse at center,transparent 45%,rgba(0,0,0,.65) 100%)}
-@media (prefers-reduced-motion:reduce){#grain{animation:none}}
+@media (prefers-reduced-motion:reduce){#grain{animation:none}.hbtn.race{animation:none}}
 body.noflair #grain,body.noflair #scan{display:none}
 
 /* ---------- layout ---------- */
@@ -68,6 +68,8 @@ header#top{
 }
 .hbtn:hover{color:var(--paper);border-color:var(--red);background:#191c25}
 .hbtn.on{color:var(--amber);border-color:var(--amber)}
+.hbtn.race{color:var(--red2);border-color:var(--red);font-family:var(--mono);letter-spacing:1px;animation:racepulse 2s infinite}
+@keyframes racepulse{0%,100%{opacity:1}50%{opacity:.55}}
 .rankchip{font-size:11px;color:var(--amber);border:1px dashed #6b5a2a;padding:3px 8px;white-space:nowrap}
 
 nav#tabs{
@@ -1792,6 +1794,11 @@ function header(){
   $("#btnSound").classList.toggle("on",!!S.sound);
   $("#btnFlair").classList.toggle("on",!!S.flair);
   document.body.classList.toggle("noflair",!S.flair);
+  let rc=$("#raceClock");
+  if(S.timedCase){
+    if(!rc){ rc=el("span","hbtn race","SÜRE "+timeLeftLabel()); rc.id="raceClock"; $("#top").insertBefore(rc,$("#btnHint")); }
+    rc.textContent="SÜRE "+timeLeftLabel();
+  } else if(rc){ rc.remove(); }
 }
 
 function render(){
@@ -1991,124 +1998,10 @@ function evCard(id,onclick){
 /* ============================================================
    ŞÜPHELİLER
    ============================================================ */
-function viewSuspects(v){
-  const c=C(),cs=CS();
-  v.appendChild(el("div","sec",`<h1>Şüpheli dosyaları</h1>
-    <p class="muted small">Her şüpheli için içgüdü ölçerini ayarla. Vaka bitiminde ilk sezgilerinle gerçek karşılaştırılacak.</p>`));
-  const g=el("div","grid g2");
-  c.suspects.forEach(s=>{
-    const val=cs.suspicion[s.id]==null?20:cs.suspicion[s.id];
-    const d=el("div","sus");
-    d.innerHTML=`<div class="head">
-        <div class="portrait">${portraitSVG(s)}</div>
-        <div style="min-width:0">
-          <div style="color:var(--paper);font-size:14px">${esc(s.name)}</div>
-          <div class="small muted">${esc(s.role)} · ${s.age}</div>
-          <div class="row" style="margin-top:6px">
-            <span class="tag">${esc(c.id.toUpperCase())}</span>
-            ${cs.ev["e_alibi_nihal"]&&s.id==="s_nihal"?"<span class='tag green'>ELENDİ</span>":""}
-            ${cs.ev["c2_e_clear"]&&s.id==="c2_eski"?"<span class='tag green'>ELENDİ</span>":""}
-            ${cs.ev["c3_e_ort_clear"]&&s.id==="c3_ort"?"<span class='tag green'>ELENDİ</span>":""}
-          </div>
-        </div></div>
-      <div class="small"><b class="muted">GEÇMİŞ:</b> ${esc(s.bio)}</div>
-      <div class="small"><b class="muted">ALİBİ:</b> ${esc(s.alibi)}</div>
-      <div class="small"><b class="muted">PROFİL:</b> ${esc(s.profile)}</div>
-      <div style="margin-top:4px"><div class="small muted">İÇGÜDÜ ÖLÇER — ŞÜPHE: <b id="lbl_${s.id}">${val}</b></div>
-      <div class="meter"><i style="width:${val}%"></i></div>
-      <input type="range" min="0" max="100" value="${val}" id="rng_${s.id}"></div>
-      <div class="row"><button class="btn sm" data-go="${s.id}">SORGUYA ÇAĞIR</button></div>`;
-    g.appendChild(d);
-    setTimeout(()=>{
-      const r=$("#rng_"+s.id,d);
-      r.oninput=()=>{ cs.suspicion[s.id]=+r.value; $("#lbl_"+s.id,d).textContent=r.value; $(".meter i",d).style.width=r.value+"%"; save(); };
-      $("[data-go]",d).onclick=()=>{ window.__interro=s.id; setTab("interro"); };
-    },0);
-  });
-  v.appendChild(g);
-}
-
-/* ============================================================
-   SORGU
-   ============================================================ */
-function viewInterro(v){
-  const c=C(),cs=CS();
-  const cur=window.__interro||c.suspects[0].id;
-  const sel=el("div","sec row");
-  c.suspects.forEach(s=>{
-    const b=el("button","btn sm"+(s.id===cur?" primary":""),esc(s.name));
-    b.onclick=()=>{ window.__interro=s.id; render(); }; sel.appendChild(b);
-  });
-  v.appendChild(sel);
-  const s=c.suspects.find(x=>x.id===cur);
-  const qs=(c.interrogation[cur]||[]);
-  const asked=cs.asked[cur]||[];
-  const wrapEl=el("div","split");
-  const left=el("div","");
-  left.innerHTML=`<div class="panel" style="margin-bottom:14px"><div class="row" style="gap:12px">
-      <div class="portrait" style="width:56px;height:70px">${portraitSVG(s)}</div>
-      <div><div style="color:var(--paper)">${esc(s.name)}</div><div class="small muted">${esc(s.role)}</div>
-      <div class="small muted" style="margin-top:4px">Sorgu odası · kayıt açık</div></div></div></div>`;
-  const qbox=el("div","panel");
-  qbox.innerHTML="<h3>Soru seç</h3>";
-  qs.forEach((q,i)=>{
-    const used=asked.includes(i);
-    const locked=q.requires&&!has(q.requires);
-    const b=el("button","choice"+(used?" used":""));
-    b.innerHTML=`<span class="tone">${esc(q.tone)}${locked?" · KİLİTLİ (kanıt gerek)":""}</span>${esc(q.q)}`;
-    b.onclick=()=>{
-      if(used){ toast("Bu soru soruldu.","red"); return; }
-      if(locked){ toast("Bu soruyu sorabilmek için önce ilgili kanıta ulaşmalısın.","red"); return; }
-      (cs.asked[cur]=cs.asked[cur]||[]).push(i);
-      S.points+=4;
-      if(q.gives) addEv(q.gives);
-      if(q.layer) unlockLayer(q.layer);
-      if(q.contradicts) toast("ÇELİŞKİ: bu ifade laboratuvar sonucuyla uyuşmuyor.","red");
-      sfx("stamp"); save(); render();
-    };
-    qbox.appendChild(b);
-  });
-  if(!qs.length) qbox.innerHTML+="<p class='small muted'>Bu şüpheli için soru kalmadı.</p>";
-  left.appendChild(qbox);
-
-  const tr=el("div","panel"); tr.style.marginTop="14px";
-  tr.innerHTML="<h3>İfade transkripti</h3>";
-  if(!asked.length) tr.innerHTML+="<p class='small muted'>Henüz soru sorulmadı.</p>";
-  asked.forEach(i=>{
-    const q=qs[i]; if(!q)return;
-    tr.innerHTML+=`<div class="transcript"><span class="q">D: ${esc(q.q)}</span><br><span class="a">${esc(q.a)}</span>
-      <div class="small" style="color:var(--amber);margin-top:4px">NOT: ${esc(q.note)}</div></div>`;
-  });
-  left.appendChild(tr);
-
-  const right=el("div","");
-  right.innerHTML=`<div class="panel"><h3>Yalan göstergesi</h3>
-    <p class="small muted">Duraksama ve ses tonu analizinden üretilen kaba bir ölçüm. Kanıt değildir, yön verir.</p>
-    ${lieMeter(cur)}</div>
-    <div class="panel" style="margin-top:14px"><h3>Elindeki kanıtlar</h3>
-    <p class="small muted">Yüzleştirme soruları yeterli kanıt olmadan açılmaz.</p>
-    <div class="row">${evList().slice(0,10).map(e=>`<span class="tag">${esc(e.title)}</span>`).join("")||"<span class='small muted'>Boş</span>"}</div></div>`;
-  wrapEl.appendChild(left); wrapEl.appendChild(right); v.appendChild(wrapEl);
-}
-function lieMeter(sid){
-  const c=C(),cs=CS(),qs=c.interrogation[sid]||[],asked=cs.asked[sid]||[];
-  let lie=0; asked.forEach(i=>{ const q=qs[i]; if(q&&(q.contradicts||q.layer||/YÜZLEŞTİR/.test(q.tone))) lie+=28; });
-  lie=Math.min(96,lie+(asked.length?8:0));
-  return `<div class="meter" style="height:10px"><i style="width:${lie}%"></i></div>
-    <div class="small muted" style="margin-top:4px">${lie<20?"Sakin — ya dürüst ya çok hazırlıklı":lie<60?"Duraksamalar artıyor":"Belirgin gerilim: baskıyı sürdür"}</div>`;
-}
-function unlockLayer(k){
-  const cs=CS(); if(cs.layers[k])return; cs.layers[k]=true; S.points+=25;
-  toast("KATMAN AÇILDI: "+({who:"KİM",how:"NASIL",why:"NEDEN"}[k])+" katmanında ilerleme kaydettin.","green");
-  document.getElementById("app").classList.add("glitch");
-  setTimeout(()=>document.getElementById("app").classList.remove("glitch"),400);
-  save();
-}
-
 /* ============================================================
    KAMERA
    ============================================================ */
-function viewCamera(v){
+function viewCamera_DEAD_REMOVED(v){
   const c=C(),cs=CS();
   v.appendChild(el("div","sec",`<h1>Güvenlik kamerası kayıtları</h1>
     <p class="muted small">Kareleri ifadelerle çapraz kontrol et. Kontrast ve parlaklık ayarı gizli detayları açığa çıkarabilir.</p>`));
@@ -2833,12 +2726,14 @@ function buroCoop(v){
 }
 
 function buroMod(v){
-  v.appendChild(el("div","sec",`<h1>Modlar</h1>`));
+  v.appendChild(el("div","sec",`<h1>Modlar</h1><p class="muted small" style="max-width:60ch;margin-top:-4px">Aynı dosyayı farklı kurallarla, farklı bir gerilimle oyna. Her mod, standart oyundan gerçekten farklı bir deneyim sunar.</p>`));
   const g=el("div","grid g2");
   const mk=(t,d,btn,fn,on)=>{ const x=el("div","panel");
     x.innerHTML=`<h3>${t}</h3><p class="small">${d}</p>`;
     const b=el("button","btn sm"+(on?" primary":""),btn); b.onclick=fn; x.appendChild(b); g.appendChild(x); };
   mk("ZOR MOD — DEDEKTİF YEMİNLİ","İpucu yok, inceleme hakkı azalır, tek itham hakkı.",S.hard?"AÇIK":"KAPALI",()=>{S.hard=!S.hard;toast("Zor mod "+(S.hard?"açıldı":"kapandı"),"amber");save();render();},S.hard);
+  mk("ZAMAN YARIŞI","Gerçek 45 dakikalık geri sayım. Süre dolarsa dosya otomatik iade edilir — sekme değiştirsen, sayfayı yenilesen bile sayaç arka planda işler.",S.timedCase?"YARIŞ AKTİF ("+timeLeftLabel()+")":"YARIŞI BAŞLAT",()=>startTimedRace());
+  mk("UZMAN MODU","Yanlış kanıt cezası iki katına çıkar (90 sn susma), lab karşılaştırmalarında tek deneme hakkın var — ikinci yanlış numune numuneyi tamamen bozar.",S.expert?"AÇIK":"KAPALI",()=>{S.expert=!S.expert;toast("Uzman modu "+(S.expert?"açıldı — dikkatli ol":"kapandı"),"amber");save();render();},S.expert);
   mk("GÜNLÜK DOSYA","Her gün tek soruluk mikro bulmaca. Seri sayacını kırma.","BUGÜNKÜ DOSYAYI AÇ",()=>dailyCase());
   mk("SONSUZ MOD","Rastgele üretilen sınırsız mini vaka.","YENİ MİNİ VAKA ÜRET",()=>endlessCase());
   mk("SINAV MODU","Sadece belge okuma ve çelişki bulma testi.","TESTE BAŞLA",()=>examMode());
@@ -2846,6 +2741,37 @@ function buroMod(v){
   mk("KARŞI-TARAF MODU","Önce iz temizleyen taraf ol, sonra aynı vakayı çöz.","BAŞLAT",()=>counterMode());
   v.appendChild(g);
 }
+
+/* ---------- ZAMAN YARIŞI MODU ---------- */
+function timeLeftLabel(){
+  if(!S.timedCase) return "";
+  const left=Math.max(0,S.timedCase.deadline-Date.now());
+  const m=Math.floor(left/60000), s=Math.floor((left%60000)/1000);
+  return m+":"+String(s).padStart(2,"0");
+}
+function startTimedRace(){
+  S.timedCase={deadline:Date.now()+45*60*1000,caseId:S.caseId||"c1"};
+  S.caseId=S.timedCase.caseId; S.cases[S.caseId]=freshCaseState();
+  save();
+  toast("ZAMAN YARIŞI BAŞLADI — 45 dakikan var. Sayaç arka planda işler.","red");
+  setTab("brief");
+}
+function checkTimedRace(){
+  if(!S.timedCase) return;
+  const left=S.timedCase.deadline-Date.now();
+  if(left<=0){
+    const c=CASES.find(x=>x.id===S.timedCase.caseId);
+    const cs=S.cases[S.timedCase.caseId];
+    if(cs && !cs.solved){
+      cs.solved={kind:"noevidence",ans:{},at:Date.now(),dur:0,timedOut:true};
+      S.stats.wrong++;
+    }
+    S.timedCase=null; save();
+    toast("SÜRE DOLDU — dosya otomatik iade edildi.","red");
+  }
+}
+setInterval(()=>{ if(S.timedCase){ checkTimedRace(); if($("#raceClock")) $("#raceClock").textContent=timeLeftLabel(); } },1000);
+
 
 function dailyCase(){
   const today=new Date().toDateString();
@@ -4008,6 +3934,15 @@ function suspectOf(id){ return (C().suspects||[]).find(s=>s.id===id); }
 /* ---------------- ŞÜPHELİLER (derin dosya) ---------------- */
 /* ---------------- ŞÜPHELİLER — editoryal dosya indeksi ---------------- */
 let suspectDetail=null;
+/* Vakalar arası ortak: bir kanıt bulununca ilgili şüpheliyi "ELENDİ" olarak işaretleyen harita.
+   Eski (artık kullanılmayan) viewSuspects sürümünde vardı, kanonik sürüme taşındı. */
+const CLEARED_BY = {
+  s_nihal:"e_alibi_nihal", c2_eski:"c2_e_clear", c3_ort:"c3_e_ort_clear",
+  c0_b:"c0_e_clear_b", c0_c:"c0_e_clear_c", c4_behlul:null, c4_selin:null,
+  c5_hasta:null, c5_esi:null, c6_hasta:null, c6_guvenlik:null
+};
+function suspectCleared(s){ const ev=CLEARED_BY[s.id]; return ev && has(ev); }
+
 function viewSuspects(v){
   const c=C(),cs=CS();
   if(suspectDetail && c.suspects.some(s=>s.id===suspectDetail)) return viewSuspectDetail(v,suspectDetail);
@@ -4018,7 +3953,8 @@ function viewSuspects(v){
   c.suspects.forEach((s,i)=>{
     const val=cs.suspicion[s.id]==null?20:cs.suspicion[s.id];
     const st=(cs.proc&&cs.proc[s.id])||{contra:[],pressure:0,route:0};
-    const row=el("div","sirow");
+    const cleared=suspectCleared(s);
+    const row=el("div","sirow"+(cleared?" cleared":""));
     row.innerHTML=`
       <div class="si-num">${String(i+1).padStart(2,"0")}</div>
       <div class="si-portrait">${portraitSVG(s)}</div>
@@ -4028,7 +3964,7 @@ function viewSuspects(v){
       </div>
       <div class="si-col si-role2"><span class="si-lbl">CASE ROLE</span>${esc((s.role||"").toUpperCase())}</div>
       <div class="si-col si-susp"><span class="si-lbl">SUSPICION</span><span class="analog-mini"><i style="--v:${val}%"></i></span> ${val}</div>
-      <div class="si-col si-status"><span class="si-lbl">STATUS</span>${st.contra.length?`<span style="color:var(--red2)">${st.contra.length} ÇELİŞKİ</span>`:"AKTİF"}</div>
+      <div class="si-col si-status"><span class="si-lbl">STATUS</span>${cleared?`<span style="color:var(--green)">ELENDİ</span>`:st.contra.length?`<span style="color:var(--red2)">${st.contra.length} ÇELİŞKİ</span>`:"AKTİF"}</div>
       <div class="si-arrow">→</div>`;
     row.onclick=()=>{ suspectDetail=s.id; render(); window.scrollTo?.(0,0); };
     idx.appendChild(row);
@@ -4212,11 +4148,12 @@ function viewInterro(v){
       const sol=c.solution||{};
       const isKeyEvidence = (sol.needEvidence||[]).includes(e.id);
       if(!isKeyEvidence){
-        // alakasız/yanlış kanıt: ceza — şüpheli 45 sn susar, baskı düşer
+        // alakasız/yanlış kanıt: ceza — şüpheli susar, baskı düşer (Uzman modunda 2 kat)
+        const lockSec = S.expert? 90 : 45;
         st.strikes=(st.strikes||0)+1;
         st.pressure=Math.max(0,st.pressure-15);
-        st.lockUntil=Date.now()+45000;
-        toast("YANLIŞ KANIT — şüpheli savunmaya geçti, 45 saniye konuşmuyor. ("+st.strikes+". hatalı sunum)","red");
+        st.lockUntil=Date.now()+lockSec*1000;
+        toast("YANLIŞ KANIT — şüpheli savunmaya geçti, "+lockSec+" saniye konuşmuyor. ("+st.strikes+". hatalı sunum)","red");
         sfx("stamp"); save(); render();
         return;
       }
@@ -4674,6 +4611,10 @@ function viewLabPro(v){
       d.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ cs.forensic[t.id]=Object.assign({},cs.forensic[t.id],{sel:+b.dataset.s,wrongSel:null}); save(); render(); });
       const rb=$("#run_"+t.id,d);
       if(rb) rb.onclick=()=>{
+        if(S.expert && st && st.attempts>=1 && !st.done){
+          toast("UZMAN MODU: bu numune için deneme hakkın bitti. Bu kanıt artık bu vakada kullanılamaz.","red");
+          return;
+        }
         rb.disabled=true; rb.textContent="ANALİZ SÜRÜYOR…";
         setTimeout(()=>{
           const attempts=((st&&st.attempts)||0)+1;
